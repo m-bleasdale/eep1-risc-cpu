@@ -1,0 +1,124 @@
+#! /c/Source/iverilog-install/bin/vvp
+:ivl_version "12.0 (devel)" "(s20150603-1539-g2693dd32b)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "C:\iverilog\lib\ivl\system.vpi";
+:vpi_module "C:\iverilog\lib\ivl\vhdl_sys.vpi";
+:vpi_module "C:\iverilog\lib\ivl\vhdl_textio.vpi";
+:vpi_module "C:\iverilog\lib\ivl\v2005_math.vpi";
+:vpi_module "C:\iverilog\lib\ivl\va_math.vpi";
+:vpi_module "C:\iverilog\lib\ivl\v2009.vpi";
+S_000001f70073af60 .scope package, "$unit" "$unit" 2 1;
+ .timescale 0 0;
+S_000001f70057dfe0 .scope module, "ADDSUB_tb" "ADDSUB_tb" 3 1;
+ .timescale 0 0;
+v000001f7007991a0_0 .var "CARRYIN", 0 0;
+v000001f700799420_0 .net "CARRYOUT", 0 0, L_000001f70079a7f0;  1 drivers
+v000001f7007996a0_0 .net "FLAGV", 0 0, L_000001f7007f51c0;  1 drivers
+v000001f700799740_0 .var "INA", 15 0;
+v000001f7007997e0_0 .var "INB", 15 0;
+v000001f70079b470_0 .var "INVERT", 0 0;
+v000001f700799d50_0 .net "OUT", 15 0, L_000001f70079b830;  1 drivers
+S_000001f70057e170 .scope module, "dut" "ADDSUB" 3 13, 4 1 0, S_000001f70057dfe0;
+ .timescale 0 0;
+    .port_info 0 /INPUT 16 "INA";
+    .port_info 1 /INPUT 16 "INB";
+    .port_info 2 /INPUT 1 "CARRYIN";
+    .port_info 3 /INPUT 1 "INVERT";
+    .port_info 4 /OUTPUT 16 "OUT";
+    .port_info 5 /OUTPUT 1 "CARRYOUT";
+    .port_info 6 /OUTPUT 1 "FLAGV";
+L_000001f700747420 .functor NOT 16, v000001f7007997e0_0, C4<0000000000000000>, C4<0000000000000000>, C4<0000000000000000>;
+L_000001f700747180 .functor XNOR 1, L_000001f70079aa70, L_000001f70079a890, C4<0>, C4<0>;
+L_000001f7007473b0 .functor XOR 1, L_000001f70079ab10, L_000001f70079b970, C4<0>, C4<0>;
+L_000001f7007f51c0 .functor AND 1, L_000001f700747180, L_000001f7007473b0, C4<1>, C4<1>;
+v000001f700576cb0_0 .net "B", 15 0, L_000001f70079a750;  1 drivers
+v000001f7005768e0_0 .net "CARRYIN", 0 0, v000001f7007991a0_0;  1 drivers
+v000001f700577040_0 .net "CARRYOUT", 0 0, L_000001f70079a7f0;  alias, 1 drivers
+v000001f7007999c0_0 .net "FLAGV", 0 0, L_000001f7007f51c0;  alias, 1 drivers
+v000001f7007994c0_0 .net "INA", 15 0, v000001f700799740_0;  1 drivers
+v000001f700799380_0 .net "INB", 15 0, v000001f7007997e0_0;  1 drivers
+v000001f700799b00_0 .net "INVERT", 0 0, v000001f70079b470_0;  1 drivers
+v000001f700799240_0 .net "OUT", 15 0, L_000001f70079b830;  alias, 1 drivers
+v000001f700799a60_0 .net "SUM", 16 0, L_000001f70079b650;  1 drivers
+v000001f700798ca0_0 .net *"_ivl_0", 15 0, L_000001f700747420;  1 drivers
+v000001f700798f20_0 .net *"_ivl_10", 16 0, L_000001f70079b290;  1 drivers
+v000001f700799880_0 .net *"_ivl_12", 16 0, L_000001f70079b150;  1 drivers
+v000001f700799560_0 .net *"_ivl_14", 16 0, L_000001f70079ba10;  1 drivers
+L_000001f70079bd08 .functor BUFT 1, C4<0000000000000000>, C4<0>, C4<0>, C4<0>;
+v000001f700799ba0_0 .net *"_ivl_17", 15 0, L_000001f70079bd08;  1 drivers
+v000001f700798d40_0 .net *"_ivl_25", 0 0, L_000001f70079aa70;  1 drivers
+v000001f700799060_0 .net *"_ivl_27", 0 0, L_000001f70079a890;  1 drivers
+v000001f700798e80_0 .net *"_ivl_28", 0 0, L_000001f700747180;  1 drivers
+v000001f700799600_0 .net *"_ivl_31", 0 0, L_000001f70079ab10;  1 drivers
+v000001f700798de0_0 .net *"_ivl_33", 0 0, L_000001f70079b970;  1 drivers
+v000001f700799100_0 .net *"_ivl_34", 0 0, L_000001f7007473b0;  1 drivers
+L_000001f70079bc78 .functor BUFT 1, C4<0>, C4<0>, C4<0>, C4<0>;
+v000001f700799920_0 .net/2u *"_ivl_4", 0 0, L_000001f70079bc78;  1 drivers
+v000001f7007992e0_0 .net *"_ivl_6", 16 0, L_000001f700799df0;  1 drivers
+L_000001f70079bcc0 .functor BUFT 1, C4<0>, C4<0>, C4<0>, C4<0>;
+v000001f700798fc0_0 .net/2u *"_ivl_8", 0 0, L_000001f70079bcc0;  1 drivers
+L_000001f70079a750 .functor MUXZ 16, v000001f7007997e0_0, L_000001f700747420, v000001f70079b470_0, C4<>;
+L_000001f700799df0 .concat [ 16 1 0 0], v000001f700799740_0, L_000001f70079bc78;
+L_000001f70079b290 .concat [ 16 1 0 0], L_000001f70079a750, L_000001f70079bcc0;
+L_000001f70079b150 .arith/sum 17, L_000001f700799df0, L_000001f70079b290;
+L_000001f70079ba10 .concat [ 1 16 0 0], v000001f7007991a0_0, L_000001f70079bd08;
+L_000001f70079b650 .arith/sum 17, L_000001f70079b150, L_000001f70079ba10;
+L_000001f70079b830 .part L_000001f70079b650, 0, 16;
+L_000001f70079a7f0 .part L_000001f70079b650, 16, 1;
+L_000001f70079aa70 .part v000001f700799740_0, 15, 1;
+L_000001f70079a890 .part L_000001f70079a750, 15, 1;
+L_000001f70079ab10 .part L_000001f70079b830, 15, 1;
+L_000001f70079b970 .part v000001f700799740_0, 15, 1;
+    .scope S_000001f70057dfe0;
+T_0 ;
+    %pushi/vec4 10, 0, 16;
+    %store/vec4 v000001f700799740_0, 0, 16;
+    %pushi/vec4 5, 0, 16;
+    %store/vec4 v000001f7007997e0_0, 0, 16;
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v000001f7007991a0_0, 0, 1;
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v000001f70079b470_0, 0, 1;
+    %delay 10, 0;
+    %vpi_call/w 3 26 "$display", "ADD: %0d + %0d = %0d", v000001f700799740_0, v000001f7007997e0_0, v000001f700799d50_0 {0 0 0};
+    %pushi/vec4 10, 0, 16;
+    %store/vec4 v000001f700799740_0, 0, 16;
+    %pushi/vec4 5, 0, 16;
+    %store/vec4 v000001f7007997e0_0, 0, 16;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v000001f7007991a0_0, 0, 1;
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v000001f70079b470_0, 0, 1;
+    %delay 10, 0;
+    %vpi_call/w 3 30 "$display", "ADC: %0d + %0d + 1 = %0d", v000001f700799740_0, v000001f7007997e0_0, v000001f700799d50_0 {0 0 0};
+    %pushi/vec4 10, 0, 16;
+    %store/vec4 v000001f700799740_0, 0, 16;
+    %pushi/vec4 5, 0, 16;
+    %store/vec4 v000001f7007997e0_0, 0, 16;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v000001f7007991a0_0, 0, 1;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v000001f70079b470_0, 0, 1;
+    %delay 10, 0;
+    %vpi_call/w 3 34 "$display", "SUB: %0d - %0d = %0d", v000001f700799740_0, v000001f7007997e0_0, v000001f700799d50_0 {0 0 0};
+    %pushi/vec4 10, 0, 16;
+    %store/vec4 v000001f700799740_0, 0, 16;
+    %pushi/vec4 5, 0, 16;
+    %store/vec4 v000001f7007997e0_0, 0, 16;
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v000001f7007991a0_0, 0, 1;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v000001f70079b470_0, 0, 1;
+    %delay 10, 0;
+    %vpi_call/w 3 38 "$display", "SBC: %0d - %0d - 1 = %0d", v000001f700799740_0, v000001f7007997e0_0, v000001f700799d50_0 {0 0 0};
+    %vpi_call/w 3 40 "$finish" {0 0 0};
+    %end;
+    .thread T_0;
+# The file index is used to find the file name in the following table.
+:file_names 5;
+    "N/A";
+    "<interactive>";
+    "-";
+    "./testing/alu/addsub_tb.sv";
+    "./alu/addsub.sv";

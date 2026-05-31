@@ -1,0 +1,37 @@
+MOV R0, #5 //Mov Imm (5)
+MOV R1, R0 //Mov Reg (5)
+
+ADD R1, #3 //Add Imm (8)
+ADD R1, R1, R0 //Add reg (13)
+
+SUB R1, #3 //Sub Imm (10)
+SUB R0, R0, R1 //Sub reg (3)
+
+MOV R2, #5 
+ADC R2, #0 //Add no C (5)
+//Set C=1
+ADC R2, #0 //Add with C (6)
+
+SBC R2, #0 //Sub no C (5)
+//Set C=1
+SBC R2, #0 //Sub with C (5)
+
+AND R2, R2, R0 //AND Reg (1)
+AND R2, #1 //AND Imm (1)
+
+MOV R3, #5
+CMP R3, R2 //CMP (C=1)
+CMP R3, #6 //CMP (C=0)
+
+MOV R4, #255
+LSL R4, R4, #8 //0xFFFF -> 0xFF00
+LSR R4, R4, #8 //0xFF00 -> 0x00FF
+
+EXT #240
+MOV R4, #21
+ASR R4, R4, #4 //0xF015 -> 0x0F01
+
+//Set C=0
+XSR R4, R4, #4 //0x0F01 -> 0x00F0
+//Set C=1
+XSR R4, R4, #4 //0x00F0 -> 0xF00F
