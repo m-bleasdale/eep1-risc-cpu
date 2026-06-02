@@ -80,7 +80,8 @@ module ALU (
             3'd7: OUT = SHIFTOUT; //SHIFT
             3'd1, 3'd2, 3'd3, 3'd4, 3'd6: OUT = ADDOUT; //ADD, SUB, ADC, SBC, CMP
             3'd5: OUT = ANDOUT; //AND
-            default: OUT = 16'b0; //MOV, undefined
+            3'd0: OUT = INB; //MOV
+            default: OUT = 16'b0; //undefined
         endcase
     end
 

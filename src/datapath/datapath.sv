@@ -87,7 +87,7 @@ module DATAPATH (
 
     assign RAOUT = DOUT2;
 
-    REG16X8 reg16x8 (
+    REG16x8 reg16x8 (
         .clk(clk), .rst(rst),
         .WEN1(WEN1),
         .AD1(AD1), .AD2(A), .AD3(B),
@@ -97,6 +97,7 @@ module DATAPATH (
 
     //Extend
     EXTEND extend (
+        .clk(clk), .rst(rst),
         .IMM(IMMS8),
         .EXT(EXT),
         .IMMEXT(IMMEXT)

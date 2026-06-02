@@ -50,7 +50,8 @@ module DPDECODE (
 
     assign OP2SEL = INS[8];
 
-    assign EXT = (INS[15:8] == 8'd0) ? 1'b1 : 1'b0;
+    //EXT starts 1101_0000 followed by IMM
+    assign EXT = (INS[15:8] == 8'd208) ? 1'b1 : 1'b0; 
 
     assign SCNT = INS[3:0];
     assign SHIFTOPC = {INS[8], INS[4]};
@@ -65,24 +66,30 @@ module DPDECODE (
     //Only for JSR
     assign PCWRITE = (INS[15:8] == 8'b1100_1110) ? 1'b1 : 1'b0;
 
+    logic INS15, INS8;
+    assign INS15 = INS[15];
+    assign INS8 = INS[8]; 
+
     //WEN1 and AD1SELC depend on ALUOPC
     always_comb begin
 
+        WEN1 = 1'b0;
+        AD1SELC = 1'b0;
+
         //WEN1=1 for: all ALU except CMP; LDR; JSR
-        if(ALUOPC != 3'd6 && INS[15] == 1'b0) begin 
+        if(ALUOPC != 3'd6 && INS15 == 1'b0) begin 
             WEN1 = 1'b1;
         end 
-        if (MEMLDR || PCWRITE) begin 
+        else if (MEMLDR || PCWRITE) begin 
             WEN1 = 1'b1;
-        end 
-        else begin
+        end else begin
             WEN1 = 1'b0;
         end
 
         //AD1SELC for: MOV, CMP, SHIFT
         if(ALUOPC == 3'd0 || ALUOPC == 3'd6 || ALUOPC == 3'd7) begin
             AD1SELC = 1'b0;
-        end else if (!INS[8]) begin
+        end else if (!INS8) begin
             AD1SELC = 1'b1;
         end else begin
             AD1SELC = 1'b0;
