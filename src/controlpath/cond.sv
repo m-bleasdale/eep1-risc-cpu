@@ -25,8 +25,8 @@ module COND (
     input logic [3:0] JMPCOND,
     input logic FLAGN, FLAGZ, FLAGC, FLAGV,
 
-    output logic JUMP,
-    output logic RET
+    output logic JUMP, //jump condition met
+    output logic RET 
 
 );
 
