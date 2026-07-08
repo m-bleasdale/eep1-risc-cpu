@@ -1,0 +1,14 @@
+MOV R0, #12 //op1
+MOV R1, #5 //op2
+MOV R2, R1 //op2_shifted
+MOV R3, #0 //sum
+
+CMP R0, #0 //op1 != 0 – updates FlagZ
+JEQ 8 //Jump out of loop
+MOV R4, R0
+AND R4, #1 //op1 & 1
+JEQ 2 //Skip summing if result is 0
+ADD R3, R2 //sum + op2_shifted
+LSL R2, R2, #1 //op2_shifted << 1
+LSR R0, R0, #1 //op1 >> 1
+JMP -8
