@@ -46,7 +46,7 @@ module ALUDECODE (
                 INVERT = 1'b1;
             end
             3'd6: begin //CMP
-                ADDSUBCIN = 1'b0;
+                ADDSUBCIN = 1'b1;
                 INVERT = 1'b1;
             end
             default: begin
