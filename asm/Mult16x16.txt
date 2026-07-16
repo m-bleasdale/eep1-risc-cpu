@@ -1,0 +1,27 @@
+EXT #128
+MOV R0, #255 //op1 = x80FF
+
+EXT #128
+MOV R1, #255 //op2 = x80FF
+
+MOV R3, R1 //op2_shifted. LOWER
+MOV R4, #0 //op2_shifted. UPPER
+
+MOV R5, #0 //sum. LOWER
+MOV R6, #0 //sum. UPPER
+
+CMP R0, #0 //op1 ?= 0 – updates FlagZ (Z=1 if result is 0)
+JEQ 11 //Jump out of loop if R0 (op1) is 0
+MOV R7, R0
+AND R7, #1 //op1 & 1 --> is LSB of R4 1?
+JEQ 3 //Skip summing if result is 0
+ADD R5, R3 //sum + op2_shifted. LOWER
+ADC R6, R4 //sum + op2_shifted + carry. UPPER (carry from lower add)
+
+LSL R4, R4, #1 //shift op2_shifted UPPER left by 1.
+LSL R3, R3, #1 //shift op2_shifted LOWER left by 1.
+ADC R4, #0 //Add carry from lower shift to upper shift
+
+LSR R0, R0, #1 //shift op1 right by 1
+
+JMP -11
