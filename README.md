@@ -11,7 +11,7 @@ EEP1 instructions are 16-bit and encoded using [this instruction format](./EEP1%
 
 ### Examples
 
-[examples/multiplication.md](examples\multiplication\multiplication.md) - How an assembly program can be used with EEP1 to multiply 2 numbers using shift and add.
+[examples/multiplication.md](./examples/multiplication/multiplication.md) - How an assembly program can be used with EEP1 to multiply 2 numbers using shift and add.
 
 
 ## What is EEP1?
