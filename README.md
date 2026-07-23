@@ -338,7 +338,7 @@ Subroutines are callable blocks of code, similar to a function. It involves sett
 
 `RET` returns a subroutine. When executed it restores `PC` to the value in `R7`.
 
-## What's similar to Arm?
+# What's similar to Arm?
 
 The design of EEP1 is based on Arm's design principles. [Arm](https://www.arm.com/) is a hardware company that designs CPU IPs that mainly implement the "[ARM architecture](https://en.wikipedia.org/wiki/ARM_architecture_family)". 
 This is a family of RISC instruction set architectures (mainly 32-bit and 64-bit) which inspired the design of EEP1. *NB: ARM is by Arm, but they are not the same thing.*
