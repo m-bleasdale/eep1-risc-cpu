@@ -1,7 +1,7 @@
 # EEP1 - Arm-based RISC CPU in SystemVerilog
 
 This project is a SystemVerilog implementation of **EEP1**, a 16-bit Harvard-architecture
-CPU based on design practices used by [Arm](https://www.arm.com/). 
+CPU based on [design practices used by Arm](./README.md#whats-similar-to-arm). 
 
 It is a Reduced Instruction Set Computing (RISC) Central Proccessing Unit (CPU). 
 *Reduced* meaning it has smaller, simpler instructions that can execute in a single cycle.
