@@ -1,7 +1,11 @@
 # EEP1 - Arm-based RISC CPU in SystemVerilog
 
 This project is a SystemVerilog implementation of **EEP1**, a 16-bit Harvard-architecture
-CPU based on design practices used by [Arm](https://www.arm.com/).
+CPU based on design practices used by [Arm](https://www.arm.com/). 
+
+It is a Reduced Instruction Set Computing (RISC) Central Proccessing Unit (CPU). 
+*Reduced* meaning it has smaller, simpler instructions that can execute in a single cycle.
+Each instruction is highly regular and perform a single operation.
 
 This ReadMe gives a **high-level overview** of how the EEP1 is designed and how a program can be run on it. 
 Module files (located in [/src](./src/)) contain a more detailed explanation of how each module works 
@@ -333,3 +337,23 @@ Subroutines are callable blocks of code, similar to a function. It involves sett
 `JSR` enters a subroutine. When executed it saves `PC + 1` to `R7` and sets the `PC` to the address specified in the instruction.
 
 `RET` returns a subroutine. When executed it restores `PC` to the value in `R7`.
+
+## What's similar to Arm?
+
+The design of EEP1 is based on Arm's design principles. [Arm](https://www.arm.com/) is a hardware company that designs CPU IPs that mainly implement the "[ARM architecture](https://en.wikipedia.org/wiki/ARM_architecture_family)". 
+This is a family of RISC instruction set architectures (mainly 32-bit and 64-bit) which inspired the design of EEP1. *NB: ARM is by Arm, but they are not the same thing.*
+
+While EEP1 does not implement the ARM instruction set directly, several of its design choices are drawn from Arm's architecture:
+
+**Conditional jumps** - EEP1 and ARM both use a flag-based conditional branching model to execute jumps if certain flag conditions are met. Arm also uses the same condition flags (NZCV). 
+This avoids the need for a dedicated comparison operation being implemented within the jump instruction.
+
+**Memory** - EEP1/ARM also both use dedicated instructions to access memory (`LDR` and `STR`). These are the only instructions that can access memory, other instructions can only operate on registers. 
+Unlike RISC, CISC (complex instruction set computing) has instructions which can directly interact with memory.
+
+**Carrying** - EEP1's `ADC`/`SBC` instructions allow multi-word arithmetic by propagating the carry flag between operations. This is a characteristic used by ARM ALUs as well.
+
+**Subroutines** - `JSR`/`RET` are used to enter/exit a subroutine. The return address is saved in a register (`R7`). ARM also uses a dedicated register for return addresses.
+
+
+
