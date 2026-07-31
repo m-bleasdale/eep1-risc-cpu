@@ -1,4 +1,4 @@
-# EEP1 - RISC CPU in SystemVerilog with custom ISA
+# RISC CPU in SystemVerilog with custom ISA
 
 This project is a SystemVerilog implementation of **EEP1**, a 16-bit Harvard-architecture
 CPU based on [design practices used by Arm](./README.md#whats-similar-to-arm). 
