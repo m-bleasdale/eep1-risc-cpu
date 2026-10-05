@@ -45,21 +45,38 @@ module DATAPATH_TB;
         end
     endtask
 
-    task show;
-        input string instr;
-        input string expected;
-        begin
-            #1;
-            $display("%s ---> R0=%h R1=%h R2=%h R3=%h R4=%h R5=%h R6=%h R7=%h NZCV=%b%b%b%b | %s",
-                instr,
-                dut.reg16x8.REG[0], dut.reg16x8.REG[1], dut.reg16x8.REG[2],
-                dut.reg16x8.REG[3], dut.reg16x8.REG[4], dut.reg16x8.REG[5],
-                dut.reg16x8.REG[6], dut.reg16x8.REG[7],
-                FLAGN, FLAGZ, FLAGC, FLAGV,
-                expected
-            );
+    int pass_count = 0;
+    int fail_count = 0;
+
+    task automatic check(
+        input string instr,
+        input int r,
+        input logic [15:0] exp_val
+    );
+        #1;
+        if (dut.reg16x8.REG[r] === exp_val) begin
+            $display("PASS | %-22s | R%0d=%h", instr, r, dut.reg16x8.REG[r]);
+            pass_count++;
+        end else begin
+            $display("FAIL | %-22s | R%0d=%h (expected %h)", instr, r, dut.reg16x8.REG[r], exp_val);
+            fail_count++;
         end
     endtask
+
+    task automatic check_flags(
+        input string instr,
+        input logic [3:0] exp_nzcv
+    );
+        #1;
+        if ({FLAGN, FLAGZ, FLAGC, FLAGV} === exp_nzcv) begin
+            $display("PASS | %-22s | NZCV=%b%b%b%b", instr, FLAGN, FLAGZ, FLAGC, FLAGV);
+            pass_count++;
+        end else begin
+            $display("FAIL | %-22s | NZCV=%b%b%b%b (expected %b)", instr, FLAGN, FLAGZ, FLAGC, FLAGV, exp_nzcv);
+            fail_count++;
+        end
+    endtask
+
     initial begin
         clk = 0;
         rst = 1;
@@ -79,104 +96,112 @@ module DATAPATH_TB;
 
         // MOV R0, #5 — load immediate 5 into R0
         apply(16'h0105);
-        show("MOV R0, #5", "R0 = 5");
+        check("MOV R0, #5", 0, 16'h0005);
 
         // MOV R1, R0 — copy R0 into R1
         apply(16'h0200);
-        show("MOV R1, R0", "R1 = 5");
+        check("MOV R1, R0", 1, 16'h0005);
 
         // ADD R1, #3 — R1 = R1 + 3
         apply(16'h1303);
-        show("ADD R1, #3", "R1 = 8");
+        check("ADD R1, #3", 1, 16'h0008);
 
         // ADD R1, R1, R0 — R1 = R1 + R0
         apply(16'h1204);
-        show("ADD R1, R1, R0", "R1 = 13");
+        check("ADD R1, R1, R0", 1, 16'h000D);
 
         // SUB R1, #3 — R1 = R1 - 3
         apply(16'h2303);
-        show("SUB R1, #3", "R1 = 10");
+        check("SUB R1, #3", 1, 16'h000A);
 
         // SUB R0, R0, R1 — R0 = R0 - R1
         apply(16'h2020);
-        show("SUB R0, R0, R1", "R0 = 3 (5 - 10 wraps... check: 5-10 = -5 = 0xFFFB? Verify ISA)");
+        check("SUB R0, R0, R1", 0, 16'hFFFB);
 
         // MOV R2, #5 — load immediate 5 into R2
         apply(16'h0505);
-        show("MOV R2, #5", "R2 = 5");
+        check("MOV R2, #5", 2, 16'h0005);
 
         // ADC R2, #0 — R2 = R2 + 0 + C (C=0)
         FLAGCIN = 0;
         apply(16'h3500);
-        show("ADC R2, #0 (C=0)", "R2 = 5");
+        check("ADC R2, #0 (C=0)", 2, 16'h0005);
 
         // Set C=1, ADC R2, #0 — R2 = R2 + 0 + C (C=1)
         FLAGCIN = 1;
         apply(16'h3500);
-        show("ADC R2, #0 (C=1)", "R2 = 6");
+        check("ADC R2, #0 (C=1)", 2, 16'h0006);
 
         // SBC R2, #0 — R2 = R2 - 0 - ~C (C=0)
+        FLAGCIN = 0;
         apply(16'h4500);
-        show("SBC R2, #0 (C=0)", "R2 = 5");
+        check("SBC R2, #0 (C=0)", 2, 16'h0005);
 
         // Set C=1, SBC R2, #0 — R2 = R2 - 0 - ~C (C=1)
         FLAGCIN = 1;
         apply(16'h4500);
-        show("SBC R2, #0 (C=1)", "R2 = 6");
+        check("SBC R2, #0 (C=1)", 2, 16'h0005);
 
         // AND R2, R2, R0 — R2 = R2 & R0 (6 & 3 = 2... per annotation expect 1, verify encoding)
         apply(16'h5408);
-        show("AND R2, R2, R0", "R2 = R2 AND R0 (expect 1)");
+        check("AND R2, R2, R0", 2, 16'h0001);
 
         // AND R2, #1 — R2 = R2 & 1
         apply(16'h5501);
-        show("AND R2, #1", "R2 = R2 AND 1 (expect 1)");
+        check("AND R2, #1", 2, 16'h0001);
 
         // MOV R3, #5 — load immediate 5 into R3
         apply(16'h0705);
-        show("MOV R3, #5", "R3 = 5");
+        check("MOV R3, #5", 3, 16'h0005);
 
         // CMP R3, R2 — compare R3(5) with R2(1), R3 > R2 so no borrow, C=1
         apply(16'h6640);
-        show("CMP R3, R2", "flags only: R3(5) > R2(1), C=1");
+        check_flags("CMP R3, R2", 4'b0010);
 
         // CMP R3, #6 — compare R3(5) with 6, R3 < 6 so borrow, C=0
         apply(16'h6706);
-        show("CMP R3, #6", "flags only: R3(5) < 6, C=0");
+        check_flags("CMP R3, #6", 4'b1000);
 
         // MOV R4, #255 — load 0xFFFF into R4
         apply(16'h09FF);
-        show("MOV R4, #255", "R4 = 0xFFFF");
+        check("MOV R4, #255", 4, 16'hFFFF);
 
         // LSL R4, R4, #8 — logical shift left by 8: 0xFFFF -> 0xFF00
         apply(16'h7888);
-        show("LSL R4, R4, #8", "R4 = 0xFF00");
+        check("LSL R4, R4, #8", 4, 16'hFF00);
 
         // LSR R4, R4, #8 — logical shift right by 8: 0xFF00 -> 0x00FF
         apply(16'h7898);
-        show("LSR R4, R4, #8", "R4 = 0x00FF");
+        check("LSR R4, R4, #8", 4, 16'h00FF);
 
         // EXT #240 — load upper immediate 240 (0xF0) into extension register
         apply(16'hd0f0);
-        show("EXT #240", "upper immediate = 0xF0, pending MOV");
+        check("EXT #240", 4, 16'h00FF);
 
         // MOV R4, #21 — R4 = {EXT, #21} = {0xF0, 0x15} = 0xF015
         apply(16'h0915);
-        show("MOV R4, #21", "R4 = 0xF015 (EXT prefix applied)");
+        check("MOV R4, #21", 4, 16'hF015);
 
         // ASR R4, R4, #4 — arithmetic shift right by 4: 0xF015 -> 0x0F01 (per annotation)
         apply(16'h7984);
-        show("ASR R4, R4, #4", "R4 = 0x0F01");
+        check("ASR R4, R4, #4", 4, 16'hFF01);
 
         // Set C=0, XSR R4, R4, #4 — shift right by 4, insert C=0 at MSB: 0x0F01 -> 0x00F0
         FLAGCIN = 0;
         apply(16'h7994);
-        show("XSR R4, R4, #4 (C=0)", "R4 = 0x00F0");
+        check("XSR R4, R4, #4 (C=0)", 4, 16'h0FF0);
 
         // Set C=1, XSR R4, R4, #4 — shift right by 4, insert C=1 at MSB: 0x00F0 -> 0xF00F
         FLAGCIN = 1;
         apply(16'h7994);
-        show("XSR R4, R4, #4 (C=1)", "R4 = 0xF00F");
+        check("XSR R4, R4, #4 (C=1)", 4, 16'hF0FF);
+
+        $display("PASSED: %0d / FAILED: %0d", pass_count, fail_count);
+
+        if (fail_count == 0)
+            $display("ALL TESTS PASSED");
+        else
+            $display("SOME TESTS FAILED");
 
         $finish;
     end
